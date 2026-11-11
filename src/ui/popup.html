@@ -1,0 +1,89 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>FB Group Poster — Đăng bài hàng loạt</title>
+<link rel="stylesheet" href="popup.css">
+</head>
+<body>
+<div class="panel">
+  <header class="top">
+    <h1>Đăng bài hàng loạt</h1>
+    <span id="safety-badge" class="badge">🟢 Hôm nay: 0/20 bài</span>
+  </header>
+
+  <section class="card">
+    <h2>1️⃣ Chọn nơi đăng</h2>
+    <div class="modes" role="group">
+      <button type="button" class="mode" id="mode-groups" data-mode="groups" aria-pressed="false">👥 <span class="mode-text">Đăng vào nhóm</span></button>
+      <button type="button" class="mode" id="mode-timeline" data-mode="timeline" aria-pressed="false">🏠 <span class="mode-text">Chỉ tường của tôi</span></button>
+    </div>
+    <div id="target-groups" hidden>
+      <button type="button" class="btn btn-scan" id="btn-scan-groups">🔍 Tìm nhóm của tôi</button>
+      <div id="scan-status" class="hint"></div>
+      <input type="search" id="group-filter" placeholder="Lọc theo tên nhóm...">
+      <div class="bulk-row">
+        <button type="button" class="btn link" id="btn-select-all">Chọn tất cả</button>
+        <button type="button" class="btn link" id="btn-deselect-all">Bỏ chọn</button>
+        <span id="group-count" class="hint">Đã chọn 0/0</span>
+      </div>
+      <div id="group-checklist" class="checklist"></div>
+      <details class="more">
+        <summary>Dán link nhóm thủ công</summary>
+        <textarea id="group-urls" rows="2" placeholder="https://www.facebook.com/groups/1234567890/"></textarea>
+        <button type="button" class="btn link" id="btn-add-manual-groups">Thêm vào danh sách</button>
+      </details>
+    </div>
+    <div id="target-timeline" hidden>
+      <input type="text" id="timelineUrl" placeholder="Để trống = tường của bạn">
+      <p class="hint">Chế độ an toàn để thử: chỉ đăng 1 bài.</p>
+    </div>
+  </section>
+
+  <section class="card">
+    <h2>2️⃣ Viết bài</h2>
+    <textarea id="post-text" rows="5" placeholder="VD: Nhà 2 phòng ngủ Vinhomes, 2,1 tỷ, sổ hồng riêng. Liên hệ 09xx.xxx.xxx"></textarea>
+    <div id="spintax-hint" class="hint">1 biến thể</div>
+    <div id="variant-preview" class="preview" hidden></div>
+    <label class="btn btn-ghost" for="post-images">📷 Chọn ảnh</label>
+    <input type="file" id="post-images" accept="image/*" multiple hidden>
+    <div id="image-list" class="thumbs"></div>
+  </section>
+
+  <section class="card">
+    <h2>3️⃣ Bấm nút</h2>
+    <button type="button" class="btn btn-primary" id="btn-start-run">🚀 ĐĂNG BÀI NGAY</button>
+    <button type="button" class="btn btn-danger" id="btn-stop-run" hidden>⏹ DỪNG</button>
+    <div id="run-caption" class="hint"></div>
+    <div id="run-strip" class="strip" hidden></div>
+    <div id="status" class="status" role="status" aria-live="polite"></div>
+  </section>
+
+  <details class="adv" id="advanced">
+    <summary>Tùy chọn nâng cao</summary>
+    <div class="presets" role="radiogroup">
+      <label class="inline"><input type="radio" name="preset" id="preset-safe" value="safe">🐢 An toàn nhất (khuyên dùng)</label>
+      <label class="inline"><input type="radio" name="preset" id="preset-medium" value="medium">⚖️ Vừa phải</label>
+      <label class="inline"><input type="radio" name="preset" id="preset-fast" value="fast">🐇 Nhanh (rủi ro cao hơn)</label>
+    </div>
+    <div class="grid">
+      <div><label>Bài tối đa mỗi ngày</label><input type="number" id="set-dailyCap" min="1" max="200"></div>
+      <div><label>Nghỉ mỗi nhóm (ngày)</label><input type="number" id="set-groupCooldownDays" min="0" max="30"></div>
+      <div><label>Chờ tối thiểu (giây)</label><input type="number" id="set-minDelaySec" min="10"></div>
+      <div><label>Chờ tối đa (giây)</label><input type="number" id="set-maxDelaySec" min="10"></div>
+      <div><label>Đếm ngược trước khi đăng (giây)</label><input type="number" id="set-confirmWindowSec" min="0"></div>
+      <div><label>Số bài mỗi lô</label><input type="number" id="set-batchSize" min="1"></div>
+    </div>
+    <label class="inline"><input type="checkbox" id="postToTimeline"> Đăng thêm lên tường sau khi hết nhóm</label>
+    <button type="button" class="btn link" id="btn-open-runner">Bảng tiến độ chi tiết ↗</button>
+  </details>
+</div>
+<script src="../core/hash.js"></script>
+<script src="../core/spintax.js"></script>
+<script src="../core/schema.js"></script>
+<script src="../core/store.js"></script>
+<script src="../core/safety.js"></script>
+<script src="../core/assets.js"></script>
+<script src="popup.js"></script>
+</body>
+</html>

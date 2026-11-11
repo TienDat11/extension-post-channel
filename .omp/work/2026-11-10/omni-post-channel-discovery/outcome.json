@@ -1,0 +1,67 @@
+{
+  "task": "omni-post-channel-discovery",
+  "dir": "D:\\extension\\.omp\\work\\2026-11-10\\omni-post-channel-discovery",
+  "tier": "M",
+  "goal": "Khảo sát thị trường + đối thủ cho Omni-post-channel và ghi phát hiện vào docs, không code",
+  "acceptance": [
+    {
+      "id": "A1",
+      "joint": "execute",
+      "check": "read docs/discovery/00-gia-thuyet-dang-neo.md, 01-thi-truong-va-doi-thu.md, 02-ra-soat-ky-thuat.md",
+      "pass": true,
+      "evidence": "3 files written (4122, 14680, 7004 bytes)"
+    },
+    {
+      "id": "A2",
+      "joint": "explore",
+      "check": "Nguồn kèm ngày kiểm tra trong bảng giá",
+      "pass": true,
+      "evidence": "Buffer Essentials $6/channel + 'prices checked 2026-11-05' trong bài so sánh API"
+    },
+    {
+      "id": "A3",
+      "joint": "verify",
+      "check": "Đọc docs.x.com pricing và Meta content publishing docs",
+      "pass": true,
+      "evidence": "Post: Create $0.015, with URL $0.200; IG publishing requires professional account + App Review"
+    },
+    {
+      "id": "A4",
+      "joint": "recovery",
+      "check": "rea list_browser_targets + inspect_web_page + analyze_web_bundle",
+      "pass": true,
+      "evidence": "inspect_web_page completeness=policy_filtered; analyze_web_bundle javascript-routes job killed at 30s budget; chuyển sang đọc source AGPL thay thế"
+    }
+  ],
+  "models": [
+    "ns24/deepseek-v4.1-flash"
+  ],
+  "tokens": 5018732,
+  "wall_ms": 0,
+  "notes": "Black-box RE qua rea bị chặn bởi origin policy và budget 30s; thay bằng đọc source Postiz (AGPL). Chưa chạy Goldfish review vì chờ Justin xác nhận giả thuyết.",
+  "sessionTelemetry": {
+    "main": {
+      "input": 84721,
+      "output": 28665,
+      "cacheRead": 4905346,
+      "cacheWrite": 0,
+      "totalTokens": 5018732,
+      "reasoningTokens": 11922
+    },
+    "workers": {},
+    "combined": {
+      "input": 84721,
+      "output": 28665,
+      "cacheRead": 4905346,
+      "cacheWrite": 0,
+      "totalTokens": 5018732,
+      "reasoningTokens": 11922
+    },
+    "cacheHitRate": 0.983022071647535,
+    "peakWindowTokens": 167925,
+    "toolCalls": 73,
+    "toolErrors": 13,
+    "subagentSpawns": 0
+  },
+  "recorded_at": "2026-11-10T02:32:28.130Z"
+}

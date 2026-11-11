@@ -1,0 +1,109 @@
+{
+  "task": "fix-timeline-start-and-queue-status-log-rendering-in-panel-a",
+  "dir": "D:\\extension\\.omp\\work\\2026-11-05\\fix-timeline-start-and-queue-status-log-rendering-in-panel-a",
+  "tier": "M",
+  "goal": "Fix FB Group Poster panel: Timeline mode start run builds queue, status/queue/log render, plus engine stop/failItem/resume/logRun fixes",
+  "acceptance": [
+    {
+      "id": "A1",
+      "joint": "execute",
+      "check": "renderStatus shows engine.getInfo() when present, 'Sẵn sàng — n mục trong hàng đợi' when queued items exist, else 'Sẵn sàng'",
+      "pass": true,
+      "evidence": "panel.js renderStatus now branches: paused → 'Đã tạm dừng'; running → getInfo(); else info from engine.getInfo() if present, else 'Sẵn sàng — ' + n + ' mục trong hàng đợi' when run.items.length > 0, else 'Sẵn sàng'"
+    },
+    {
+      "id": "A2",
+      "joint": "execute",
+      "check": "engine.subscribe uses renderAllSafe guard calling renderAll (groups+queue+status+thumbs+log)",
+      "pass": true,
+      "evidence": "panel.js defines rendering guard + renderAllSafe (lines 625-630); renderAll calls renderGroups/renderQueue/renderStatus/renderThumbs/renderLog; both boot branches subscribe renderAllSafe (lines 664, 705)"
+    },
+    {
+      "id": "A3",
+      "joint": "execute",
+      "check": "renderLog formats [hh:mm:ss] m from run.log into #log, scrolls bottom, trims >300 lines",
+      "pass": true,
+      "evidence": "panel.js renderLog (lines 640-655) reads root.engine.getRun().log, formats '[hh:mm:ss] m' via pad2, trims to last 300 entries, sets #log.textContent and scrollTop = scrollHeight"
+    },
+    {
+      "id": "A4",
+      "joint": "execute",
+      "check": "renderQueue shows placeholder 'Chưa có hàng đợi...' when no items",
+      "pass": true,
+      "evidence": "panel.js renderQueue (lines 231-238) appends a colSpan=5 row 'Chưa có hàng đợi — chọn nhóm hoặc chế độ Tường rồi bấm Bắt đầu' when !run || !run.items"
+    },
+    {
+      "id": "A5",
+      "joint": "execute",
+      "check": "startRun reads timeline radio, sets postToTimeline=true + targetMode, validations (a)-(d) in place",
+      "pass": true,
+      "evidence": "panel.js startRun (lines 440-458) reads mode-timeline radio, sets state.mode, postToTimeline=true for timeline else checkbox value, targetMode = state.mode; existing checks: (a) 'Chưa có nội dung', (b) 'Chưa chọn nhóm nào' only in groups mode, (c) 'Hôm nay đã đủ cap bài'; timeline runs with zero groups"
+    },
+    {
+      "id": "B1",
+      "joint": "execute",
+      "check": "engine stop() calls saveRun(true); render() after cancelling item",
+      "pass": true,
+      "evidence": "engine.js stop() now has saveRun(true); render() right after cur.state = 'cancelled' (lines 478-479)"
+    },
+    {
+      "id": "B2",
+      "joint": "execute",
+      "check": "engine failItem assigns needs_manual / queued / failed exclusively, no double assignment",
+      "pass": true,
+      "evidence": "engine.js failItem (lines 262-275): MANUAL_CODES → needs_manual; else attempts <= retryBeforeClick → queued; else failed; single assignment, plus logRun('❌ code @ name') + render()"
+    },
+    {
+      "id": "B3",
+      "joint": "execute",
+      "check": "engine resume() calls setInfo('Đang tiếp tục...') and render()",
+      "pass": true,
+      "evidence": "engine.js resume() now ends with loop(); setInfo('Đang tiếp tục...'); render() (lines 496-499)"
+    },
+    {
+      "id": "B4",
+      "joint": "execute",
+      "check": "engine logRun called at loop start, waitReady ok, fill ok, submit ok, failItem, finish; render() after each logRun",
+      "pass": true,
+      "evidence": "engine.js logRun + render at: loop 'Đang mở: name' (351), waitReady ok 'Đã sẵn sàng' (147), fill ok 'Đã điền bài' (369-370), step2 submit ok '✅ Đã đăng: name' (306-307), failItem '❌ code @ name' (273-274), finish logRun(state.info) before render (407-408)"
+    },
+    {
+      "id": "B5",
+      "joint": "verify",
+      "check": "node --check passes for both panel.js and engine.js",
+      "pass": true,
+      "evidence": "node --check src/ui/panel.js → PANEL_OK; node --check src/ui/engine.js → ENGINE_OK"
+    }
+  ],
+  "models": [
+    "vilao/minimax-m3.1-flash"
+  ],
+  "tokens": 1200841,
+  "wall_ms": 0,
+  "notes": "All acceptance criteria passed. node --check clean on both files. npm test intentionally not run (director will run).",
+  "sessionTelemetry": {
+    "main": {
+      "input": 93785,
+      "output": 18720,
+      "cacheRead": 1088336,
+      "cacheWrite": 0,
+      "totalTokens": 1200841,
+      "reasoningTokens": 0
+    },
+    "workers": {},
+    "combined": {
+      "input": 93785,
+      "output": 18720,
+      "cacheRead": 1088336,
+      "cacheWrite": 0,
+      "totalTokens": 1200841,
+      "reasoningTokens": 0
+    },
+    "cacheHitRate": 0.920663789916599,
+    "peakWindowTokens": 64062,
+    "toolCalls": 35,
+    "toolErrors": 1,
+    "subagentSpawns": 0
+  },
+  "recorded_at": "2026-11-05T02:20:56.973Z"
+}

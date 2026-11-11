@@ -1,0 +1,10 @@
+# Trạng thái công cụ cục bộ (không phải mã nguồn)
+.omp/harness/
+.omp/memory/
+.ua/tmp/
+.superpowers/
+node_modules/
+
+# Log và cơ sở dữ liệu cục bộ
+*.db
+*.log

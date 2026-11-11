@@ -1,0 +1,53 @@
+{
+  "version": "1.0.0",
+  "project": {
+    "name": "extension",
+    "languages": [
+      "json",
+      "markdown"
+    ],
+    "frameworks": [],
+    "description": "",
+    "analyzedAt": "2026-11-04T03:10:26.581Z",
+    "gitCommitHash": ""
+  },
+  "nodes": [
+    {
+      "id": "document:.omp/APPEND_SYSTEM.md",
+      "type": "document",
+      "name": "APPEND_SYSTEM.md",
+      "filePath": ".omp/APPEND_SYSTEM.md",
+      "summary": "markdown file (326 lines): (no top-level structures)",
+      "tags": [
+        "markdown",
+        "docs"
+      ],
+      "complexity": "moderate"
+    },
+    {
+      "id": "config:.omp/harness/skill-allowlist.json",
+      "type": "config",
+      "name": "skill-allowlist.json",
+      "filePath": ".omp/harness/skill-allowlist.json",
+      "summary": "json file (490 lines): (no top-level structures)",
+      "tags": [
+        "json",
+        "config"
+      ],
+      "complexity": "moderate"
+    }
+  ],
+  "edges": [],
+  "layers": [],
+  "tour": [
+    {
+      "order": 1,
+      "title": "Step 1: Code Walkthrough",
+      "description": "Exploring: APPEND_SYSTEM.md (markdown file (326 lines): (no top-level structures)); skill-allowlist.json (json file (490 lines): (no top-level structures)).",
+      "nodeIds": [
+        "document:.omp/APPEND_SYSTEM.md",
+        "config:.omp/harness/skill-allowlist.json"
+      ]
+    }
+  ]
+}

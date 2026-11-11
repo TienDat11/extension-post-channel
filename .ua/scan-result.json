@@ -1,0 +1,48 @@
+{
+  "scriptCompleted": true,
+  "contentDigest": "0785c83037341f23b61cc29c60cc3538df5e5db719b137c6d44ccf179eecb09d",
+  "files": [
+    {
+      "path": ".omp/APPEND_SYSTEM.md",
+      "language": "markdown",
+      "sizeLines": 326,
+      "fileCategory": "docs"
+    },
+    {
+      "path": ".omp/harness/skill-allowlist.json",
+      "language": "json",
+      "sizeLines": 490,
+      "fileCategory": "config"
+    },
+    {
+      "path": ".omp/harness/skill-telemetry.db",
+      "language": "db",
+      "sizeLines": 3,
+      "fileCategory": "code"
+    },
+    {
+      "path": ".omp/harness/telemetry.jsonl",
+      "language": "jsonl",
+      "sizeLines": 11,
+      "fileCategory": "code"
+    }
+  ],
+  "totalFiles": 4,
+  "filteredByIgnore": 0,
+  "estimatedComplexity": "small",
+  "failures": [],
+  "stats": {
+    "filesScanned": 4,
+    "byCategory": {
+      "docs": 1,
+      "config": 1,
+      "code": 2
+    },
+    "byLanguage": {
+      "markdown": 1,
+      "json": 1,
+      "db": 1,
+      "jsonl": 1
+    }
+  }
+}

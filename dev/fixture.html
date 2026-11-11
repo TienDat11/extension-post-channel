@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>FBQ fixture — mô phỏng composer group Facebook</title>
+<style>
+  body { font-family: system-ui, -apple-system, Segoe UI, sans-serif; margin: 24px; color: #1a1a1a; }
+  h1 { font-size: 18px; margin: 0 0 16px; }
+  [role="dialog"] { border: 1px solid #ccc; border-radius: 8px; padding: 16px; width: 520px; margin-top: 12px; }
+  [role="dialog"][data-open="1"] { display: block; }
+  [role="dialog"] { display: none; }
+  #editor { border: 1px solid #dfe3e6; border-radius: 6px; padding: 8px 12px; min-height: 120px; font-size: 14px; margin-bottom: 10px; }
+  input[type="file"] { margin-bottom: 10px; display: block; }
+  .row { margin: 8px 0; }
+  #result { margin-top: 16px; padding: 10px; border: 1px solid #dfe3e6; border-radius: 6px; min-height: 24px; white-space: pre-wrap; font-family: monospace; font-size: 13px; }
+</style>
+</head>
+<body>
+<h1>FBQ fixture — mô phỏng composer Facebook</h1>
+
+<div role="button" aria-label="Viết gì đó" tabindex="0">Viết gì đó?</div>
+
+<div role="dialog" id="composer-dialog">
+  <div contenteditable="true" role="textbox" id="editor"></div>
+  <input type="file" accept="image/*" id="file-input">
+  <div class="row">
+    <button role="button" aria-label="Đăng">Đăng</button>
+  </div>
+</div>
+
+<div class="row">
+  <button id="run">Chạy</button>
+</div>
+<div id="result"></div>
+
+<script src="../src/content/dom.js"></script>
+<script src="../src/content/selectors.js"></script>
+<script src="../src/content/adapter-group.js"></script>
+<script>
+(function () {
+  var trigger = document.querySelector('[aria-label="Viết gì đó"]');
+  var dialog = document.getElementById('composer-dialog');
+  var editor = document.getElementById('editor');
+  var result = document.getElementById('result');
+  var runBtn = document.getElementById('run');
+
+  trigger.addEventListener('click', function () {
+    var isOpen = dialog.getAttribute('data-open') === '1';
+    if (isOpen) {
+      dialog.removeAttribute('data-open');
+      dialog.style.display = 'none';
+      editor.innerHTML = '';
+    } else {
+      dialog.setAttribute('data-open', '1');
+      dialog.style.display = 'block';
+    }
+  });
+
+  runBtn.addEventListener('click', function () {
+    result.textContent = 'Đang chạy prepare...';
+    window.FBQ['adapter-group'].prepare(
+      'Chào nhóm,\n\nĐây là nội dung bài đăng mẫu có nhiều đoạn.\nLine #3',
+      []
+    ).then(function (res) {
+      result.textContent = 'OK\n' + JSON.stringify(res, null, 2);
+    }, function (err) {
+      result.textContent = 'LỖI\n' + (err && err.code ? err.code + ' — ' + err.message : String(err));
+    });
+  });
+})();
+</script>
+</body>
+</html>

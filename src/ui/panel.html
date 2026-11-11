@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+<meta charset="utf-8">
+<title>FB Group Poster — Panel</title>
+<link rel="stylesheet" href="panel.css">
+</head>
+<body>
+<header>
+  <h1>FB Group Poster</h1>
+  <span id="badge-daily">🟢 Hôm nay: 0/20</span>
+  <span id="status">Sẵn sàng</span>
+  <button id="btn-start">▶ Bắt đầu</button>
+  <button id="btn-pause">⏸ Tạm dừng</button>
+  <button id="btn-stop">⏹ Dừng</button>
+  <progress id="progress" max="1" value="0"></progress>
+  <span id="eta"></span>
+</header>
+<div id="board">
+  <section id="col-compose">
+    <h2>Soạn bài</h2>
+    <textarea id="post-text" placeholder="Nội dung bài đăng (hỗ trợ spintax {a|b})"></textarea>
+    <div id="image-pick"><label for="post-images">📷 Chọn ảnh</label><input id="post-images" type="file" multiple accept="image/*" hidden></div>
+    <div id="thumbs"></div>
+    <div id="spintax-hint">1 biến thể</div>
+    <div id="variant-preview" hidden></div>
+    <fieldset id="mode-set">
+      <legend>Chế độ</legend>
+      <label><input type="radio" name="mode" id="mode-groups" value="groups"> Nhóm</label>
+      <label><input type="radio" name="mode" id="mode-timeline" value="timeline"> Chỉ tường của tôi</label>
+    </fieldset>
+    <div id="timeline-box" hidden>
+      <label>URL tường: <input id="timeline-url" type="text" placeholder="Để trống = tường của bạn"></label>
+    </div>
+  </section>
+  <div class="splitter" data-target="compose"></div>
+  <section id="col-groups">
+    <h2>Nhóm</h2>
+    <button id="btn-scan">🔍 Tìm nhóm của tôi</button>
+    <div id="scan-status"></div>
+    <input id="group-filter" type="text" placeholder="Lọc nhóm...">
+    <div id="group-actions">
+      <button id="btn-select-all">Chọn tất cả</button>
+      <button id="btn-select-none">Bỏ chọn</button>
+    </div>
+    <div id="group-count">0 nhóm</div>
+    <div id="group-list"></div>
+    <div id="group-urls-box">
+      <textarea id="group-urls" placeholder="Dán link nhóm, mỗi dòng một link"></textarea>
+      <button id="btn-add-groups">Thêm link</button>
+    </div>
+  </section>
+  <div class="splitter" data-target="groups"></div>
+  <section id="col-queue">
+    <h2>Hàng đợi</h2>
+    <table id="queue-table">
+      <thead>
+        <tr><th>#</th><th>Nhóm</th><th>Trạng thái</th><th>Lỗi</th><th>Thao tác</th></tr>
+      </thead>
+      <tbody id="queue-rows"></tbody>
+    </table>
+  </section>
+</div>
+<details id="advanced">
+  <summary>Nâng cao</summary>
+  <fieldset>
+    <legend>Preset</legend>
+    <label><input type="radio" name="preset" id="preset-safe" value="safe"> An toàn</label>
+    <label><input type="radio" name="preset" id="preset-medium" value="medium"> Trung bình</label>
+    <label><input type="radio" name="preset" id="preset-fast" value="fast"> Nhanh</label>
+  </fieldset>
+  <div class="setting-row"><label>Giới hạn đăng/ngày: <input id="set-dailyCap" type="number" min="0"></label></div>
+  <div class="setting-row"><label>Cooldown nhóm (ngày): <input id="set-groupCooldownDays" type="number" min="0"></label></div>
+  <div class="setting-row"><label>Trễ ít nhất (giây): <input id="set-minDelaySec" type="number" min="0"></label></div>
+  <div class="setting-row"><label>Trễ nhiều nhất (giây): <input id="set-maxDelaySec" type="number" min="0"></label></div>
+  <div class="setting-row"><label>Chờ xác nhận (giây): <input id="set-confirmWindowSec" type="number" min="0"></label></div>
+  <div class="setting-row"><label>Tối đa mỗi lần chạy: <input id="set-maxPerRun" type="number" min="0"></label></div>
+  <div class="setting-row"><label><input type="checkbox" id="postToTimeline"> Đăng thêm lên tường sau khi hết nhóm</label></div>
+</details>
+<pre id="log"></pre>
+<script src="../core/hash.js"></script>
+<script src="../core/spintax.js"></script>
+<script src="../core/safety.js"></script>
+<script src="../core/schema.js"></script>
+<script src="../core/assets.js"></script>
+<script src="../core/protocol.js"></script>
+<script src="../core/queue.js"></script>
+<script src="../core/status.js"></script>
+<script src="../core/transitions.js"></script>
+<script src="../core/lease.js"></script>
+<script src="engine.js"></script>
+<script src="panel.js"></script>
+</body>
+</html>

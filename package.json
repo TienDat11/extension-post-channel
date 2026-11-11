@@ -1,0 +1,10 @@
+{
+  "name": "fbq",
+  "private": true,
+  "version": "0.1.0",
+  "description": "Chrome/Edge extension: đăng 1 bài lên nhiều group Facebook (Load unpacked)",
+  "scripts": {
+    "test": "node --test test/*.js",
+    "pack": "node scripts/pack.mjs"
+  }
+}

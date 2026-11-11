@@ -1,0 +1,81 @@
+{
+  "task": "buoc3-buoc4-buoc6-popup-giao-dien-3-khoi",
+  "dir": "D:\\extension\\.omp\\work\\2026-11-04\\buoc3-buoc4-buoc6-popup-giao-dien-3-khoi",
+  "tier": "L",
+  "goal": "Hoàn thiện giao diện 3 khối popup (Bước 3 mục1 + Bước 4 runner.html + Bước 6 popup), xóa options.*, cập nhật manifest, test xanh",
+  "acceptance": [
+    {
+      "id": "A1",
+      "joint": "execute",
+      "check": "manifest.json không còn options_page; default_popup và content_scripts giữ nguyên; options.html/js/css đã xóa thực tế",
+      "pass": true,
+      "evidence": "grep manifest.json: No matches; glob src/ui/* chỉ còn popup.css/html/js, runner.html/js"
+    },
+    {
+      "id": "A2",
+      "joint": "execute",
+      "check": "runner.html nạp hash.js, spintax.js, safety.js trước schema.js; nhãn nút mới (▶ Chạy ngay, ⏸ Tạm dừng, ⏹ Dừng tất cả); runner-log nằm trong details.log-details; ID gốc và runner.js ở cuối",
+      "pass": true,
+      "evidence": "đã đọc lại src/ui/runner.html: script tags ở dòng 176-180, nút dòng 24-27, details dòng 38-40"
+    },
+    {
+      "id": "A3",
+      "joint": "execute",
+      "check": "popup.html 3 khối (1️⃣ Chọn nơi đăng, 2️⃣ Viết bài, 3️⃣ Bấm nút) + advanced, IDs khớp spec; script nạp đúng thứ tự hash→spintax→schema→store→safety→assets→popup; link popup.css",
+      "pass": true,
+      "evidence": "đã viết lại src/ui/popup.html 4764 bytes"
+    },
+    {
+      "id": "A4",
+      "joint": "execute",
+      "check": "popup.css có :root (--bg,--fg,--muted,--line,--primary,--danger) và các quy tắc bắt buộc (body 420px/15px, btn-primary 64px/20px/700/14px, mode 88px, btn 48px, checklist max-height 190px, card border/line/radius/padding)",
+      "pass": true,
+      "evidence": "đã viết lại src/ui/popup.css 5399 bytes"
+    },
+    {
+      "id": "A5",
+      "joint": "execute",
+      "check": "popup.js node --check pass; IIFE + guard root.installed.popup + module.exports Node; export root.popup={start,stop,state}; guard mọi chrome.*",
+      "pass": true,
+      "evidence": "node --check src/ui/popup.js → CHECK_OK"
+    },
+    {
+      "id": "A6",
+      "joint": "verify",
+      "check": "node --test toàn bộ bộ quy định pass fail 0",
+      "pass": true,
+      "evidence": "node --test 7 file: 35 passed, 0 failed (adapter, assets, hash, load, schema, spintax, store)"
+    }
+  ],
+  "models": [
+    "vilao/minimax-m3.1-flash"
+  ],
+  "tokens": 963770,
+  "wall_ms": 0,
+  "notes": "Không đụng src/core/*, src/content/*, src/bg/sw.js, src/ui/runner.js. safety.js chưa tồn tại trong repo (worker khác làm) nhưng vẫn chèn thẻ <script> vào runner.html và popup.html theo spec — Chrome bỏ qua 404, test Node không đọc html.",
+  "sessionTelemetry": {
+    "main": {
+      "input": 162724,
+      "output": 33574,
+      "cacheRead": 767472,
+      "cacheWrite": 0,
+      "totalTokens": 963770,
+      "reasoningTokens": 0
+    },
+    "workers": {},
+    "combined": {
+      "input": 162724,
+      "output": 33574,
+      "cacheRead": 767472,
+      "cacheWrite": 0,
+      "totalTokens": 963770,
+      "reasoningTokens": 0
+    },
+    "cacheHitRate": 0.8250648250476244,
+    "peakWindowTokens": 77646,
+    "toolCalls": 41,
+    "toolErrors": 5,
+    "subagentSpawns": 0
+  },
+  "recorded_at": "2026-11-04T16:35:28.229Z"
+}

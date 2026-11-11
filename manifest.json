@@ -1,0 +1,26 @@
+{
+  "manifest_version": 3,
+  "name": "FB Group Poster",
+  "version": "0.1.0",
+  "minimum_chrome_version": "120",
+  "permissions": ["storage", "unlimitedStorage", "tabs", "notifications"],
+  "host_permissions": ["https://*.facebook.com/*"],
+  "background": { "service_worker": "src/bg/sw.js" },
+  "action": {},
+  "content_scripts": [{
+    "matches": ["https://*.facebook.com/*"],
+    "run_at": "document_idle",
+    "all_frames": false,
+    "js": [
+      "src/core/hash.js",
+      "src/core/spintax.js",
+      "src/core/safety.js",
+      "src/core/protocol.js",
+      "src/content/dom.js",
+      "src/content/selectors.js",
+      "src/content/adapter-group.js",
+      "src/content/runner.js",
+      "src/content/scanner.js"
+    ]
+  }]
+}
