@@ -6,78 +6,124 @@
 <link rel="stylesheet" href="panel.css">
 </head>
 <body>
-<header>
-  <h1>FB Group Poster</h1>
-  <span id="badge-daily">🟢 Hôm nay: 0/20</span>
-  <span id="status">Sẵn sàng</span>
-  <button id="btn-start">▶ Bắt đầu</button>
-  <button id="btn-pause">⏸ Tạm dừng</button>
-  <button id="btn-stop">⏹ Dừng</button>
-  <progress id="progress" max="1" value="0"></progress>
-  <span id="eta"></span>
+<header class="app-bar">
+  <div class="brand">
+    <h1>Đăng bài đa kênh</h1>
+    <span id="badge-daily" class="pill">Hôm nay: 0/20</span>
+  </div>
+  <div class="run-controls">
+    <span id="status" class="status">Sẵn sàng</span>
+    <button id="btn-start" class="btn btn-primary">Bắt đầu đăng</button>
+    <button id="btn-pause" class="btn">Tạm dừng</button>
+    <button id="btn-stop" class="btn btn-danger-outline">Dừng</button>
+  </div>
+  <div class="run-progress">
+    <progress id="progress" max="1" value="0"></progress>
+    <span id="eta"></span>
+  </div>
 </header>
-<div id="board">
-  <section id="col-compose">
-    <h2>Soạn bài</h2>
-    <textarea id="post-text" placeholder="Nội dung bài đăng (hỗ trợ spintax {a|b})"></textarea>
-    <div id="image-pick"><label for="post-images">📷 Chọn ảnh</label><input id="post-images" type="file" multiple accept="image/*" hidden></div>
-    <div id="thumbs"></div>
-    <div id="spintax-hint">1 biến thể</div>
+
+<main id="board">
+  <section id="col-compose" class="step">
+    <div class="step-head">
+      <span class="step-no">1</span>
+      <div>
+        <h2>Soạn bài</h2>
+        <p class="hint">Viết nội dung, thêm ảnh nếu cần.</p>
+      </div>
+    </div>
+    <textarea id="post-text" placeholder="Nội dung bài đăng. Dùng {a|b} để tạo biến thể."></textarea>
+    <div id="spintax-hint" class="hint">1 biến thể</div>
     <div id="variant-preview" hidden></div>
-    <fieldset id="mode-set">
-      <legend>Chế độ</legend>
-      <label><input type="radio" name="mode" id="mode-groups" value="groups"> Nhóm</label>
-      <label><input type="radio" name="mode" id="mode-timeline" value="timeline"> Chỉ tường của tôi</label>
+    <div class="row-inline">
+      <label id="image-pick" class="btn btn-ghost" for="post-images">Thêm ảnh</label>
+      <input id="post-images" type="file" multiple accept="image/*" hidden>
+    </div>
+    <div id="thumbs"></div>
+  </section>
+
+  <div class="splitter" data-target="compose" aria-hidden="true"></div>
+
+  <section id="col-groups" class="step">
+    <div class="step-head">
+      <span class="step-no">2</span>
+      <div>
+        <h2>Chọn nơi đăng</h2>
+        <p class="hint">Tick các nhóm muốn đăng. Có thể chỉ đăng lên tường của bạn.</p>
+      </div>
+    </div>
+
+    <fieldset id="mode-set" class="mode-set">
+      <legend class="sr-only">Chế độ đăng</legend>
+      <label class="choice"><input type="radio" name="mode" id="mode-groups" value="groups"> <span>Các nhóm đã chọn</span></label>
+      <label class="choice"><input type="radio" name="mode" id="mode-timeline" value="timeline"> <span>Chỉ tường của tôi</span></label>
     </fieldset>
+
     <div id="timeline-box" hidden>
-      <label>URL tường: <input id="timeline-url" type="text" placeholder="Để trống = tường của bạn"></label>
+      <label class="field">URL tường <input id="timeline-url" type="text" placeholder="Để trống = tường của bạn"></label>
     </div>
-  </section>
-  <div class="splitter" data-target="compose"></div>
-  <section id="col-groups">
-    <h2>Nhóm</h2>
-    <button id="btn-scan">🔍 Tìm nhóm của tôi</button>
-    <div id="scan-status"></div>
-    <input id="group-filter" type="text" placeholder="Lọc nhóm...">
-    <div id="group-actions">
-      <button id="btn-select-all">Chọn tất cả</button>
-      <button id="btn-select-none">Bỏ chọn</button>
+
+    <div id="group-tools">
+      <button id="btn-scan" class="btn">Tìm nhóm của tôi</button>
+      <div id="scan-status" class="hint"></div>
+      <input id="group-filter" type="search" placeholder="Lọc theo tên nhóm">
+      <div id="group-actions">
+        <button id="btn-select-all" class="btn btn-ghost">Chọn tất cả</button>
+        <button id="btn-select-none" class="btn btn-ghost">Bỏ chọn</button>
+        <span id="group-count" class="hint">0 nhóm</span>
+      </div>
     </div>
-    <div id="group-count">0 nhóm</div>
     <div id="group-list"></div>
-    <div id="group-urls-box">
+
+    <details id="group-urls-box">
+      <summary>Thêm nhóm bằng link</summary>
       <textarea id="group-urls" placeholder="Dán link nhóm, mỗi dòng một link"></textarea>
-      <button id="btn-add-groups">Thêm link</button>
-    </div>
+      <button id="btn-add-groups" class="btn">Thêm link</button>
+    </details>
   </section>
-  <div class="splitter" data-target="groups"></div>
-  <section id="col-queue">
-    <h2>Hàng đợi</h2>
+
+  <div class="splitter" data-target="groups" aria-hidden="true"></div>
+
+  <section id="col-queue" class="step">
+    <div class="step-head">
+      <span class="step-no">3</span>
+      <div>
+        <h2>Tiến độ</h2>
+        <p class="hint">Mỗi dòng là một lượt đăng. Bấm "Bắt đầu đăng" ở trên để chạy.</p>
+      </div>
+    </div>
     <table id="queue-table">
       <thead>
-        <tr><th>#</th><th>Nhóm</th><th>Trạng thái</th><th>Lỗi</th><th>Thao tác</th></tr>
+        <tr><th>#</th><th>Nơi đăng</th><th>Trạng thái</th><th>Lỗi</th><th></th></tr>
       </thead>
       <tbody id="queue-rows"></tbody>
     </table>
   </section>
-</div>
+</main>
+
 <details id="advanced">
-  <summary>Nâng cao</summary>
-  <fieldset>
-    <legend>Preset</legend>
-    <label><input type="radio" name="preset" id="preset-safe" value="safe"> An toàn</label>
-    <label><input type="radio" name="preset" id="preset-medium" value="medium"> Trung bình</label>
-    <label><input type="radio" name="preset" id="preset-fast" value="fast"> Nhanh</label>
-  </fieldset>
-  <div class="setting-row"><label>Giới hạn đăng/ngày: <input id="set-dailyCap" type="number" min="0"></label></div>
-  <div class="setting-row"><label>Cooldown nhóm (ngày): <input id="set-groupCooldownDays" type="number" min="0"></label></div>
-  <div class="setting-row"><label>Trễ ít nhất (giây): <input id="set-minDelaySec" type="number" min="0"></label></div>
-  <div class="setting-row"><label>Trễ nhiều nhất (giây): <input id="set-maxDelaySec" type="number" min="0"></label></div>
-  <div class="setting-row"><label>Chờ xác nhận (giây): <input id="set-confirmWindowSec" type="number" min="0"></label></div>
-  <div class="setting-row"><label>Tối đa mỗi lần chạy: <input id="set-maxPerRun" type="number" min="0"></label></div>
-  <div class="setting-row"><label><input type="checkbox" id="postToTimeline"> Đăng thêm lên tường sau khi hết nhóm</label></div>
+  <summary>Cài đặt nâng cao</summary>
+  <div class="adv-grid">
+    <fieldset class="preset">
+      <legend>Mức an toàn</legend>
+      <label class="choice"><input type="radio" name="preset" id="preset-safe" value="safe"> <span>An toàn</span></label>
+      <label class="choice"><input type="radio" name="preset" id="preset-medium" value="medium"> <span>Trung bình</span></label>
+    </fieldset>
+    <div class="setting-row"><label>Giới hạn đăng/ngày <input id="set-dailyCap" type="number" min="0"></label></div>
+    <div class="setting-row"><label>Cooldown nhóm (ngày) <input id="set-groupCooldownDays" type="number" min="0"></label></div>
+    <div class="setting-row"><label>Trễ ít nhất (giây) <input id="set-minDelaySec" type="number" min="0"></label></div>
+    <div class="setting-row"><label>Trễ nhiều nhất (giây) <input id="set-maxDelaySec" type="number" min="0"></label></div>
+    <div class="setting-row"><label>Chờ xác nhận (giây) <input id="set-confirmWindowSec" type="number" min="0"></label></div>
+    <div class="setting-row"><label>Tối đa mỗi lần chạy <input id="set-maxPerRun" type="number" min="0"></label></div>
+    <div class="setting-row"><label class="choice"><input type="checkbox" id="postToTimeline"> <span>Đăng thêm lên tường sau khi hết nhóm</span></label></div>
+  </div>
 </details>
-<pre id="log"></pre>
+
+<details id="log-box">
+  <summary>Nhật ký</summary>
+  <pre id="log"></pre>
+</details>
+
 <script src="../core/hash.js"></script>
 <script src="../core/spintax.js"></script>
 <script src="../core/safety.js"></script>
