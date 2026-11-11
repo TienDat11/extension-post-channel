@@ -359,21 +359,37 @@ test('Ca 13: res.ok payload.failed sau commit -> unknown, cf +1, log khong ghi D
   var item = st.run.items[0];
   item.state = 'countdown';
   engine._step2(item);
-  // Đợi tới khi luồng step2 thật sự xong (run kết thúc, finishedAt được đặt
-  // bởi afterItem/finish) rồi mới assert và dọn timer.
-  return new Promise(function (resolve) {
+  // Đợi tới khi item đạt trạng thái cuối (unknown) và log đã ghi. Không đợi
+  // finishedAt: sau item, afterItem đặt timer chờ minDelaySec (3600s ở fixture)
+  // rồi mới finish, nên đợi finishedAt sẽ treo. Dọn timer bằng _resetForTest.
+  return new Promise(function (resolve, reject) {
+    var deadline = Date.now() + 3000;
     (function poll() {
-      if (st.run.finishedAt > 0) {
+      if (Date.now() > deadline) {
+        var run = st.run || {};
+        var msg = 'item không kết thúc: item.state=' + item.state + ', run.status=' + run.status + ', log=' + JSON.stringify((run.log || []).map(function (e) { return e.m; }));
+        engine._resetForTest();
+        delete globalThis.chrome;
+        reject(new Error(msg));
+        return;
+      }
+      if (item.state === 'unknown' && st.run.log.some(function (e) { return e.m.indexOf('Không xác định') !== -1; })) {
+        // Chụp trạng thái trước khi _resetForTest xóa st.run; dọn timer kể cả khi assert lỗi.
+        var snap = {
+          clickedAt: item.clickedAt, state: item.state, postedAt: item.postedAt,
+          consecutiveFails: st.run.consecutiveFails,
+          lastPostedAt: st.groups[0].lastPostedAt,
+          logged: st.run.log.map(function (e) { return e.m; }).join('\n')
+        };
         engine._resetForTest(); // dọn saveTimer + state.timer của engine
         delete globalThis.chrome;
-        assert.ok(item.clickedAt > 0, 'da commit clickedAt');
-        assert.strictEqual(item.state, 'unknown');
-        assert.strictEqual(st.run.consecutiveFails, 4, 'loi khong duoc reset bo dem');
-        assert.strictEqual(item.postedAt, 0, 'khong gan postedAt');
-        assert.ok(st.groups[0].lastPostedAt > 0, 'unknown có clickedAt vẫn đánh dấu nơi đã đăng (KTD11)');
-        var logged = st.run.log.map(function (e) { return e.m; }).join('\n');
-        assert.ok(logged.indexOf('Đã đăng') === -1, 'log khong duoc ghi Đã đăng');
-        assert.ok(logged.indexOf('Không xác định') !== -1, 'log ghi đúng trạng thái unknown');
+        assert.ok(snap.clickedAt > 0, 'da commit clickedAt');
+        assert.strictEqual(snap.state, 'unknown');
+        assert.strictEqual(snap.consecutiveFails, 4, 'loi khong duoc reset bo dem');
+        assert.strictEqual(snap.postedAt, 0, 'khong gan postedAt');
+        assert.ok(snap.lastPostedAt > 0, 'unknown có clickedAt vẫn đánh dấu nơi đã đăng (KTD11)');
+        assert.ok(snap.logged.indexOf('Đã đăng') === -1, 'log khong duoc ghi Đã đăng');
+        assert.ok(snap.logged.indexOf('Không xác định') !== -1, 'log ghi đúng trạng thái unknown');
         resolve();
         return;
       }

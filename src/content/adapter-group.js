@@ -266,9 +266,14 @@
     // Cách bấm trên trang thật (click hay chuỗi pointer events) do U1 xác nhận.
     d.clickEl(btn);
 
-    // Chờ dialog đóng sau khi bấm Đăng.
+    // Chờ đúng composer (dialog chứa editor đã bắt ở trên) bị gỡ khỏi DOM.
+    // Không chờ "không còn dialog nào": Facebook luôn có dialog khác (Thông báo) mở.
+    function composerClosed() {
+      if (dialog) return !dialog.isConnected;
+      return !s.assertDom(timeline ? 'EDITOR_TIMELINE' : 'EDITOR');
+    }
     try {
-      await d.waitFor(function () { return !document.querySelector('[role="dialog"]'); }, 45000);
+      await d.waitFor(composerClosed, postTimeout);
     } catch (e) {
       result.failed = true;
       result.errorCode = 'post_timeout';

@@ -35,7 +35,8 @@
       a = seg.attrs[i];
       actual = el.getAttribute ? el.getAttribute(a.attr) : null;
       if (actual === null || actual === undefined) return false;
-      if (a.op === '=' && actual !== a.val) return false;
+      // Regex chỉ bắt '*' hoặc '^' vào op; dạng [attr="val"] có op = null và phải so khớp chính xác.
+      if ((a.op === null || a.op === '=') && actual !== a.val) return false;
       if (a.op === '^=' && actual.indexOf(a.val) !== 0) return false;
       if (a.op === '*=' && actual.indexOf(a.val) === -1) return false;
     }
@@ -133,6 +134,18 @@
   };
 
   FakeElement.prototype.focus = function () {};
+
+  // Giống trình duyệt: phần tử còn nối tới document thì isConnected = true.
+  Object.defineProperty(FakeElement.prototype, 'isConnected', {
+    get: function () {
+      var n = this;
+      while (n) {
+        if (n.nodeType === 9) return true;
+        n = n.parent;
+      }
+      return false;
+    }
+  });
 
   FakeElement.prototype.addEventListener = function (type, fn) {
     var h = this._handlers || (this._handlers = {});

@@ -44,7 +44,7 @@ function removeDialog(dialog) {
   if (!parent) return;
   var children = parent.children;
   for (var i = children.length - 1; i >= 0; i--) {
-    if (children[i] === dialog) { children.splice(i, 1); return; }
+    if (children[i] === dialog) { children.splice(i, 1); dialog.parent = null; return; }
   }
 }
 
@@ -126,6 +126,24 @@ test('b. hai dialog cùng mở: chọn nút trong dialog có editor', async func
   assert.strictEqual(aRef._clicks.length, 1);
   assert.strictEqual(bRef._clicks.length, 0);
   assert.strictEqual(doc.querySelectorAll('[role="dialog"]').length, 0);
+});
+
+test('b2. dialog không liên quan (thông báo) vẫn mở sau khi composer đóng -> posted', async function () {
+  var inRef;
+  var doc = buildDoc({
+    dialogs: [
+      { editor: true, buttons: [{ id: 'in', text: 'Đăng', ref: function (b) { inRef = b; } }] },
+      { buttons: [] }
+    ]
+  });
+  // Trên Facebook, nút Đăng chỉ đóng composer; panel Thông báo (role="dialog") vẫn mở.
+  inRef._onClick = function () { removeDialog(doc.dialogs[0]); };
+  global.document = doc;
+  var result = await ag.post({ postTimeoutMs: 300 });
+  assert.strictEqual(result.failed, false);
+  assert.strictEqual(result.posted, true);
+  assert.strictEqual(result.errorCode, undefined);
+  assert.strictEqual(doc.querySelectorAll('[role="dialog"]').length, 1);
 });
 
 test('c1. aria-disabled="true" được chờ, không bị bấm trước khi bật', async function () {
